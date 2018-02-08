@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<properties>
+  <superusers>
+    <username>EDIT_YOUR_USERNAME</username>
+  </superusers>
+  <bot>
+    <name>Auth Log Notifyer</name>
+    <token>EDIT_YOUR_BOT_TOKEN</token>
+    <messages>
+      <hello>The bot is started.</hello>
+      <accessdenied>Access denied.</accessdenied>
+      <accept>You're added to list.</accept>
+      <cancel>You're already in list.</cancel>
+    </messages>
+  </bot>
+  <logs>
+    <logfile>
+      <parser>AuthLog</parser>
+      <filename>/var/log/auth.log</filename>
+      <processfilters>
+        <name>sshd</name>
+      </processfilters>
+    </logfile>
+  </logs>
+</properties>
