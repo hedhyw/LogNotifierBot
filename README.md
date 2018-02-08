@@ -15,7 +15,7 @@ If he answers **"access denied"**, you are not in the super users list (see prop
 <properties>
   <bot>
     <name>Auth Log Notifyer</name>
-    <token>YOUR_AUTH_TOKEN</token>
+    <token>BOT_TOKEN</token>
     <messages>
       <hello>The bot is started.</hello>
       <accessdenied>Access denied.</accessdenied>
