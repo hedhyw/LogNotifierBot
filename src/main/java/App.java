@@ -11,7 +11,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import log.LogParser;
-import log.factory.LogParserFactory;
 import model.BotInfo;
 import model.Constants;
 import model.LogInfo;
@@ -19,38 +18,23 @@ import model.AppProperties;
 
 public class App {
 
-    private static void configure(File paramsDir) {
-        if (!paramsDir.mkdir()) {
-            System.err.println(String.format("Could not create %s directory.",
-                paramsDir.getAbsolutePath()));
-            return;
-        }
-        InputStream res = App.class.getResourceAsStream(
-            Constants.PROPERTIES_XML_RES);
-        try {
-            java.nio.file.Files.copy(res,
-               Paths.get(Constants.PROPERTIES_XML_FILE),
-               StandardCopyOption.REPLACE_EXISTING);
-        } catch(IOException ex) {
-            System.err.println(String.format("Could not create %s file.",
-                Constants.PROPERTIES_XML_FILE));
-            return;
-        }
-        System.out.println(String.format(
-            "For continue configuration, edit %s file.",
-            Constants.PROPERTIES_XML_FILE));
-    }
-
     public static void main(String[] args) {
-        File paramsDir = new File(Constants.APP_PARAMS_DIRECTORY);
-        if (!paramsDir.exists()) {
-            configure(paramsDir);
+
+        if (!AppProperties.isPropertiesFileExist()) {
+            if (AppProperties.createPropertiesSkeleton()) {
+                System.out.println(String.format(
+                    "For continue configuration, edit %s file.",
+                    Constants.PROPERTIES_XML_FILE));
+            } else {
+                System.err.println(String.format("Could not create %s file.",
+                    Constants.PROPERTIES_XML_FILE));
+            }
             return;
         }
 
         AppProperties prop = null;
         try {
-            prop = new AppProperties();
+            prop = AppProperties.load();
         } catch (IOException ex) {
             System.err.println(String.format("Could not read %s file.",
                 Constants.PROPERTIES_XML_FILE));
@@ -65,8 +49,7 @@ public class App {
         List<LogInfo> logs = prop.getLogs();
         List<LogParser> parsers = new ArrayList<LogParser>();
         for (LogInfo log : logs) {
-            LogParserFactory creator = log.getLogParserCreator();
-            LogParser parser = creator.createLogParser();
+            LogParser parser = LogParser.of(log);
             if (parser != null) parsers.add(parser);
         }
 

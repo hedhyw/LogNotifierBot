@@ -2,6 +2,9 @@ package model;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
@@ -41,36 +44,38 @@ public class AppProperties {
   private List<String> superUsers;
   private List<LogInfo> logs;
 
-  public AppProperties()
-    throws IOException, ParserConfigurationException,
-           SAXException {
-      File file = new File(Constants.PROPERTIES_XML_FILE);
-      if (!file.canRead()) throw new IOException();
-
-      DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-      DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
-      Document doc = docBuilder.parse(file);
-      doc.getDocumentElement().normalize();
-      NodeList childNodes = doc.getDocumentElement().getChildNodes();
-      for (int i = 0; i < childNodes.getLength(); ++i) {
-        Node node = childNodes.item(i);
-        if (node.getNodeType() != Node.ELEMENT_NODE) continue;
-        Element element = (Element) node;
-        switch (element.getTagName().toLowerCase()) {
-          case NODE_BOT:
-            botInfo = getBotInfo(element);
-            break;
-          case NODE_SUPERUSERS:
-            superUsers = getSuperUsers(element);
-            break;
-          case NODE_LOGS:
-            logs = getLogs(element);
-            break;
-        }
-      };
+  private AppProperties(
+    BotInfo botInfo,
+    List<String> superUsers,
+    List<LogInfo> logs) {
+      this.botInfo = botInfo;
+      this.superUsers = superUsers;
+      this.logs = logs;
   }
 
-  protected BotInfo getBotInfo(Element botElement) {
+  public static boolean createPropertiesSkeleton() {
+    File paramsDir = new File(Constants.APP_PARAMS_DIRECTORY);
+    if (!paramsDir.exists() && !paramsDir.mkdir()) {
+      return false;
+    }
+    InputStream res = AppProperties.class.getResourceAsStream(
+        Constants.PROPERTIES_XML_RES);
+    try {
+        java.nio.file.Files.copy(res,
+           Paths.get(Constants.PROPERTIES_XML_FILE),
+            StandardCopyOption.REPLACE_EXISTING);
+    } catch(IOException ex) {
+        return false;
+    }
+    return true;
+  }
+
+  public static boolean isPropertiesFileExist() {
+    File file = new File(Constants.PROPERTIES_XML_FILE);
+    return file.exists();
+  }
+
+  private static BotInfo getBotInfo(Element botElement) {
     String botName = Constants.NOT_DEFINED;
     String botToken = Constants.NOT_DEFINED;
     BotMessages botMessages = null;
@@ -94,7 +99,7 @@ public class AppProperties {
     return new BotInfo(botName, botToken, botMessages);
   }
 
-  protected BotMessages getBotMessages(Element messagesElement) {
+  private static BotMessages getBotMessages(Element messagesElement) {
     String startup = Constants.NOT_DEFINED;
     String accessDenied = Constants.NOT_DEFINED;
     String acceptRequest = Constants.NOT_DEFINED;
@@ -122,7 +127,7 @@ public class AppProperties {
     return new BotMessages(startup, accessDenied, acceptRequest, cancelRequest);
   }
 
-  protected List<String> getSuperUsers(Element superusersElement) {
+  private static List<String> getSuperUsers(Element superusersElement) {
     List<String> users = new ArrayList<String>();
     NodeList childNodes = superusersElement.getChildNodes();
     for (int i = 0; i < childNodes.getLength(); ++i) {
@@ -135,7 +140,7 @@ public class AppProperties {
     return Collections.unmodifiableList(users);
   }
 
-  protected List<LogInfo> getLogs(Element logsElement) {
+  private static List<LogInfo> getLogs(Element logsElement) {
     List<LogInfo> logs = new ArrayList<LogInfo>();
     NodeList childNodes = logsElement.getChildNodes();
     for (int i = 0; i < childNodes.getLength(); ++i) {
@@ -148,7 +153,7 @@ public class AppProperties {
     return Collections.unmodifiableList(logs);
   }
 
-  protected LogInfo getLog(Element logInfoElement) {
+  private static LogInfo getLog(Element logInfoElement) {
     String parserName = Constants.NOT_DEFINED;
     String fileName = Constants.NOT_DEFINED;
     List<String> processNames = new ArrayList<String>();;
@@ -172,7 +177,7 @@ public class AppProperties {
     return new LogInfo(parserName, fileName, processNames);
   }
 
-  protected List<String> getProcessNames(Element processNameElement) {
+  private static List<String> getProcessNames(Element processNameElement) {
     List<String> processNames = new ArrayList<String>();;
     NodeList childNodes = processNameElement.getChildNodes();
     for (int i = 0; i < childNodes.getLength(); ++i) {
@@ -183,6 +188,38 @@ public class AppProperties {
         processNames.add(element.getTextContent().toLowerCase());
     }
     return processNames;
+  }
+
+  public static AppProperties load()
+    throws IOException, ParserConfigurationException, SAXException {
+    BotInfo botInfo = null;
+    List<String> superUsers = Collections.emptyList();
+    List<LogInfo> logs = Collections.emptyList();
+
+    File file = new File(Constants.PROPERTIES_XML_FILE);
+    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+    DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
+    Document doc = docBuilder.parse(file);
+    doc.getDocumentElement().normalize();
+    NodeList childNodes = doc.getDocumentElement().getChildNodes();
+    for (int i = 0; i < childNodes.getLength(); ++i) {
+      Node node = childNodes.item(i);
+      if (node.getNodeType() != Node.ELEMENT_NODE) continue;
+      Element element = (Element) node;
+      switch (element.getTagName().toLowerCase()) {
+        case NODE_BOT:
+          botInfo = getBotInfo(element);
+          break;
+        case NODE_SUPERUSERS:
+          superUsers = getSuperUsers(element);
+          break;
+        case NODE_LOGS:
+          logs = getLogs(element);
+          break;
+      }
+    };
+
+    return new AppProperties(botInfo, superUsers, logs);
   }
 
   public BotInfo getBotInfo() {

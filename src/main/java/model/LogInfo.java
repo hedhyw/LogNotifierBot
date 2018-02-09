@@ -3,12 +3,6 @@ package model;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nullable;
-
-import log.LogParser;
-import log.factory.LogEntryFactory;
-import log.factory.LogParserFactory;
-
 public class LogInfo {
 
   private final String parserName;
@@ -29,19 +23,8 @@ public class LogInfo {
     return processNames;
   }
 
-  public LogParserFactory getLogParserCreator() {
-
-    return new LogParserFactory() {
-      @Nullable
-      @Override
-      public LogParser createLogParser() {
-        LogEntryFactory logEntryCreator =
-          LogEntryFactory.getCreatorByParserName(parserName);
-        if (logEntryCreator == null) return null;
-        return new LogParser(fileName, processNames, logEntryCreator);
-      }
-    };
-
+  public String getParserNames() {
+    return parserName;
   }
 
 }

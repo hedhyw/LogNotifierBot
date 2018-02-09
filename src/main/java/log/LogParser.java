@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.annotation.Nullable;
+
 import log.factory.LogEntryFactory;
 import log.model.LogEntry;
 import log.model.LogParseException;
+import model.LogInfo;
 
 public class LogParser {
 
@@ -17,13 +20,24 @@ public class LogParser {
   private List<String> processNamesFilter;
   private LogEntryFactory logEntryCreator;
 
-  public LogParser(
+  private LogParser(
     String logFileName,
     List<String> processNamesFilter,
     LogEntryFactory logEntryCreator) {
       this.logFileName = logFileName;
       this.processNamesFilter = processNamesFilter;
       this.logEntryCreator = logEntryCreator;
+  }
+
+  @Nullable
+  public static LogParser of(LogInfo info) {
+    LogEntryFactory logEntryCreator =
+      LogEntryFactory.getCreatorByParserName(info.getParserNames());
+    if (logEntryCreator == null) return null;
+    return new LogParser(
+      info.getFileName(),
+      info.getprocessNames(),
+      logEntryCreator);
   }
 
   public ArrayList<LogEntry> getNewLogs() {

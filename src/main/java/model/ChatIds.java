@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,11 +31,14 @@ public class ChatIds extends AbstractList<Long> {
   private static final String ATTR_CHAT_ID = "id";
   private List<Long> chatIds;
 
-  public ChatIds() {
-    chatIds = new ArrayList<Long>();
+  private ChatIds(List<Long> chatIds) {
+    this.chatIds = chatIds;
+  }
+
+  public static ChatIds getInstance() {
+    List<Long> chatIds = new ArrayList<Long>();
     try {
       File file = new File(Constants.CHATS_XML_FILE);
-      if (!file.canRead()) return;
       SAXParserFactory saxFactory = SAXParserFactory.newInstance();
       SAXParser saxParser = saxFactory.newSAXParser();
       SAXChatIdsHandler saxHandler =
@@ -45,6 +50,7 @@ public class ChatIds extends AbstractList<Long> {
       SAXException |
       IOException ex) {
     }
+    return new ChatIds(chatIds);
   }
 
   public Long get(int index) {

@@ -31,7 +31,7 @@ class LogNotifyerBot extends TelegramBot
       this.botMessages = botInfo.getMessages();
       this.superUsers = superUsers;
       setUpdatesListener(this);
-      chatIds = new ChatIds();
+      chatIds = ChatIds.getInstance();
       LogThread authLogThread = new LogThread(parsers);
       authLogThread.setOnNewLogsReceivedListener(this);
       authLogThread.start();

@@ -10,7 +10,7 @@ public class Constants {
     Paths.get(APP_PARAMS_DIRECTORY, "chats.auto.xml").toString();
   public static final String PROPERTIES_XML_FILE =
     Paths.get(APP_PARAMS_DIRECTORY, "properties.xml").toString();
-  public static final String PROPERTIES_XML_RES = "properties.xml";
+  public static final String PROPERTIES_XML_RES = "/properties.xml";
   public static final String AUTH_LOG_PARSER_NAME = "AuthLog";
   public static final String NOT_DEFINED = "Not defined.";
   public static final int LOG_THREAD_SLEEP_TIME = 200;
