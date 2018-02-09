@@ -1,4 +1,4 @@
-package log.model;
+package ru.hedhyw.lognotifierbot.log.model;
 
 public class LogParseException extends Exception {
 

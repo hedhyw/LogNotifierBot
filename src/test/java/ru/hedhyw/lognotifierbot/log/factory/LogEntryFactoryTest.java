@@ -1,9 +1,10 @@
-package log.factory;
+package ru.hedhyw.lognotifierbot.log.factory;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import log.model.LogEntry;
-import log.model.LogParseException;
+import ru.hedhyw.lognotifierbot.log.model.LogEntry;
+import ru.hedhyw.lognotifierbot.log.model.LogParseException;
 
 public class LogEntryFactoryTest {
 

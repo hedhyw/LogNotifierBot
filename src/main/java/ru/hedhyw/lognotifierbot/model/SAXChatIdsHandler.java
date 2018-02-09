@@ -1,4 +1,4 @@
-package model;
+package ru.hedhyw.lognotifierbot.model;
 
 import java.util.ArrayList;
 import java.util.List;

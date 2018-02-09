@@ -1,8 +1,8 @@
-package log.factory;
+package ru.hedhyw.lognotifierbot.log.factory;
 
-import log.model.LogEntry;
-import log.model.LogParseException;
-import model.Constants;
+import ru.hedhyw.lognotifierbot.log.model.LogEntry;
+import ru.hedhyw.lognotifierbot.log.model.LogParseException;
+import ru.hedhyw.lognotifierbot.model.Constants;
 
 public interface LogEntryFactory {
 

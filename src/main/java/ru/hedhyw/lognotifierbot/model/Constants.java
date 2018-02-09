@@ -1,11 +1,11 @@
-package model;
+package ru.hedhyw.lognotifierbot.model;
 
 import java.nio.file.Paths;
 
 public class Constants {
 
   public static final String APP_PARAMS_DIRECTORY =
-    Paths.get(System.getProperty("user.home"), ".LogNotifyerBot").toString();
+    Paths.get(System.getProperty("user.home"), ".LogNotifierBot").toString();
   public static final String CHATS_XML_FILE =
     Paths.get(APP_PARAMS_DIRECTORY, "chats.auto.xml").toString();
   public static final String PROPERTIES_XML_FILE =

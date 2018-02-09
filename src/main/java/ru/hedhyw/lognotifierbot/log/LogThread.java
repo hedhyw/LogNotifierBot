@@ -1,11 +1,11 @@
-package log;
+package ru.hedhyw.lognotifierbot.log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import log.model.LogEntry;
-import log.model.OnNewLogsReceivedListener;
-import model.Constants;;
+import ru.hedhyw.lognotifierbot.log.model.LogEntry;
+import ru.hedhyw.lognotifierbot.log.model.OnNewLogsReceivedListener;
+import ru.hedhyw.lognotifierbot.model.Constants;;
 
 public class LogThread extends Thread {
 

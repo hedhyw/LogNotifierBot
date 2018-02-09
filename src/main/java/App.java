@@ -1,8 +1,4 @@
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +6,12 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import log.LogParser;
-import model.BotInfo;
-import model.Constants;
-import model.LogInfo;
-import model.AppProperties;
+import ru.hedhyw.lognotifierbot.LogNotifierBot;
+import ru.hedhyw.lognotifierbot.log.LogParser;
+import ru.hedhyw.lognotifierbot.model.AppProperties;
+import ru.hedhyw.lognotifierbot.model.BotInfo;
+import ru.hedhyw.lognotifierbot.model.Constants;
+import ru.hedhyw.lognotifierbot.model.LogInfo;
 
 public class App {
 
@@ -68,8 +65,9 @@ public class App {
             return;
         }
 
-        new LogNotifyerBot(botInfo, parsers, superUsers);
-
+        LogNotifierBot bot =
+            new LogNotifierBot(botInfo, parsers, superUsers);
+        bot.start();
         try {
             while (true) Thread.sleep(1000);
         } catch (InterruptedException ex) {

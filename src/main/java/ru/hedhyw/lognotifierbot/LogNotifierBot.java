@@ -1,3 +1,5 @@
+package ru.hedhyw.lognotifierbot;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,34 +10,39 @@ import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 
-import log.LogParser;
-import log.LogThread;
-import log.model.LogEntry;
-import log.model.OnNewLogsReceivedListener;
-import model.BotInfo;
-import model.BotMessages;
-import model.ChatIds;
+import ru.hedhyw.lognotifierbot.log.LogParser;
+import ru.hedhyw.lognotifierbot.log.LogThread;
+import ru.hedhyw.lognotifierbot.log.model.LogEntry;
+import ru.hedhyw.lognotifierbot.log.model.OnNewLogsReceivedListener;
+import ru.hedhyw.lognotifierbot.model.BotInfo;
+import ru.hedhyw.lognotifierbot.model.BotMessages;
+import ru.hedhyw.lognotifierbot.model.ChatIds;
 
-class LogNotifyerBot extends TelegramBot
+public class LogNotifierBot extends TelegramBot
   implements UpdatesListener, OnNewLogsReceivedListener {
 
   private ChatIds chatIds;
   private BotMessages botMessages;
   private List<String> superUsers;
+  List<LogParser> parsers;
 
-  LogNotifyerBot(
+  public LogNotifierBot(
     BotInfo botInfo,
     List<LogParser> parsers,
     List<String> superUsers) {
       super(botInfo.getToken());
       this.botMessages = botInfo.getMessages();
       this.superUsers = superUsers;
-      setUpdatesListener(this);
-      chatIds = ChatIds.getInstance();
-      LogThread authLogThread = new LogThread(parsers);
-      authLogThread.setOnNewLogsReceivedListener(this);
-      authLogThread.start();
-      notifyAll(botMessages.getStartup());
+      this.parsers = parsers;
+  }
+
+  public void start() {
+    setUpdatesListener(this);
+    chatIds = ChatIds.getInstance();
+    LogThread authLogThread = new LogThread(parsers);
+    authLogThread.setOnNewLogsReceivedListener(this);
+    authLogThread.start();
+    notifyAll(botMessages.getStartup());
   }
 
   public void logsReceived(ArrayList<LogEntry> logs) {

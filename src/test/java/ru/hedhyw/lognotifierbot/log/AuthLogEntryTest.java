@@ -1,10 +1,10 @@
-package log;
+package ru.hedhyw.lognotifierbot.log;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import log.model.AuthLogEntry;
-import log.model.LogParseException;
+import ru.hedhyw.lognotifierbot.log.model.AuthLogEntry;
+import ru.hedhyw.lognotifierbot.log.model.LogParseException;
 
 public class AuthLogEntryTest {
 

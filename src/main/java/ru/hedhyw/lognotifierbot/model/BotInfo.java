@@ -1,4 +1,4 @@
-package model;
+package ru.hedhyw.lognotifierbot.model;
 
 public class BotInfo {
 

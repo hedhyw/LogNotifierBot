@@ -1,4 +1,4 @@
-package log;
+package ru.hedhyw.lognotifierbot.log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,10 +8,10 @@ import java.util.Scanner;
 
 import javax.annotation.Nullable;
 
-import log.factory.LogEntryFactory;
-import log.model.LogEntry;
-import log.model.LogParseException;
-import model.LogInfo;
+import ru.hedhyw.lognotifierbot.log.factory.LogEntryFactory;
+import ru.hedhyw.lognotifierbot.log.model.LogEntry;
+import ru.hedhyw.lognotifierbot.log.model.LogParseException;
+import ru.hedhyw.lognotifierbot.model.LogInfo;
 
 public class LogParser {
 
